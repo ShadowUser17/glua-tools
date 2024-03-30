@@ -1,3 +1,19 @@
+concommand.Add("gm_getplayers", function(ply, cmd, args)
+    for _, ent in ipairs(player.GetAll()) do
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("%s %d %d", ent:Nick(), ent:Health(), ent:Armor()))
+    end
+end)
+
+
+concommand.Add("gm_getnpcs", function(ply, cmd, args)
+    for _, ent in ents.Iterator() do
+        if ent:IsNPC() then
+            ply:PrintMessage(HUD_PRINTCONSOLE, string.format("%s %d", ent:GetClass(), ent:Health()))
+        end
+    end
+end)
+
+
 concommand.Add("gm_sethealth", function(ply, cmd, args)
     if not ply:IsAdmin() then
         ply:PrintMessage(HUD_PRINTCONSOLE, "You must be an admin to use this command!")
