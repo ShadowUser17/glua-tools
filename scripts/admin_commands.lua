@@ -1,6 +1,6 @@
 concommand.Add("gm_getplayers", function(ply, cmd, args)
     for _, ent in ipairs(player.GetAll()) do
-        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("%s %d %d", ent:Nick(), ent:Health(), ent:Armor()))
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("%s (%d %d)", ent:Nick(), ent:Health(), ent:Armor()))
     end
 end)
 
@@ -21,7 +21,7 @@ concommand.Add("gm_getweapons", function(ply, cmd, args)
     end
 
     if not args[1] then
-        ply:PrintMessage(HUD_PRINTCONSOLE, "Usage: " .. cmd .. " <#userid|name>")
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <#userid|name>", cmd))
         return
     end
 
@@ -85,6 +85,40 @@ concommand.Add("gm_getweapons", function(ply, cmd, args)
 end)
 
 
+concommand.Add("gm_delweapons", function(ply, cmd, args)
+    if not ply:IsAdmin() then
+        ply:PrintMessage(HUD_PRINTCONSOLE, "You must be an admin to use this command!")
+        return
+    end
+
+    if not args[1] then
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <#userid|name>", cmd))
+        return
+    end
+
+    local target = nil
+    if tonumber(args[1]) then
+        target = Entity(tonumber(args[1]))
+
+    else
+        for _, item in ipairs(player.GetAll()) do
+            if string.find(string.lower(item:Nick()), string.lower(args[1])) ~= nil then
+                target = item
+                break
+            end
+        end
+    end
+
+    if not IsValid(target) or not target:IsPlayer() then
+        ply:PrintMessage(HUD_PRINTCONSOLE, "Player not found!")
+        return
+    end
+
+    target:StripWeapons()
+    target:StripAmmo()
+end)
+
+
 concommand.Add("gm_sethealth", function(ply, cmd, args)
     if not ply:IsAdmin() then
         ply:PrintMessage(HUD_PRINTCONSOLE, "You must be an admin to use this command!")
@@ -92,7 +126,7 @@ concommand.Add("gm_sethealth", function(ply, cmd, args)
     end
 
     if not args[1] or not args[2] then
-        ply:PrintMessage(HUD_PRINTCONSOLE, "Usage: " .. cmd .. " <#userid|name> <amount>")
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <#userid|name> <amount>", cmd))
         return
     end
 
@@ -115,7 +149,7 @@ concommand.Add("gm_sethealth", function(ply, cmd, args)
     end
 
     target:SetHealth(tonumber(args[2]))
-    print("Health of " .. target:Nick() .. " is " .. ply:Health())
+    ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Health of %s is %d", target:Nick(), ply:Health()))
 end)
 
 
@@ -126,7 +160,7 @@ concommand.Add("gm_setarmor", function(ply, cmd, args)
     end
 
     if not args[1] or not args[2] then
-        ply:PrintMessage(HUD_PRINTCONSOLE, "Usage: " .. cmd .. " <#userid|name> <amount>")
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <#userid|name> <amount>", cmd))
         return
     end
 
@@ -149,5 +183,5 @@ concommand.Add("gm_setarmor", function(ply, cmd, args)
     end
 
     target:SetArmor(tonumber(args[2]))
-    print("Armor of " .. target:Nick() .. " is " .. ply:Armor())
+    ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Armor of %s is %d", target:Nick(), ply:Armor()))
 end)
