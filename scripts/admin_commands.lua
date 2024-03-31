@@ -21,7 +21,7 @@ concommand.Add("gm_getweapons", function(ply, cmd, args)
     end
 
     if not args[1] then
-        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <#userid|name>", cmd))
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <userid|name> [add_extra]", cmd))
         return
     end
 
@@ -46,42 +46,44 @@ concommand.Add("gm_getweapons", function(ply, cmd, args)
     target:StripWeapons()
     target:StripAmmo()
 
-    -- Base tools:
+    -- Base weapons:
     target:Give("weapon_physcannon", true)
     target:Give("weapon_stunstick", true)
     target:Give("weapon_physgun", true)
     target:Give("weapon_medkit", false)
     target:Give("gmod_tool", true)
 
-    -- Base weapons:
-    target:Give("weapon_pistol", false)
-    target:GiveAmmo(500, "Pistol", true)
+    -- Extra weapons:
+    if args[2] then
+        target:Give("weapon_pistol", false)
+        target:GiveAmmo(500, "Pistol", true)
 
-    target:Give("weapon_357", false)
-    target:GiveAmmo(200, "357", true)
+        target:Give("weapon_357", false)
+        target:GiveAmmo(200, "357", true)
 
-    target:Give("weapon_smg1", false)
-    target:GiveAmmo(500, "SMG1", true)
-    target:GiveAmmo(10, "SMG1_Grenade", true)
+        target:Give("weapon_smg1", false)
+        target:GiveAmmo(500, "SMG1", true)
+        target:GiveAmmo(10, "SMG1_Grenade", true)
 
-    target:Give("weapon_ar2", false)
-    target:GiveAmmo(470, "AR2", true)
-    target:GiveAmmo(10, "AR2AltFire", true)
+        target:Give("weapon_ar2", false)
+        target:GiveAmmo(470, "AR2", true)
+        target:GiveAmmo(10, "AR2AltFire", true)
 
-    target:Give("weapon_shotgun", false)
-    target:GiveAmmo(300, "Buckshot", true)
+        target:Give("weapon_shotgun", false)
+        target:GiveAmmo(300, "Buckshot", true)
 
-    target:Give("weapon_crossbow", false)
-    target:GiveAmmo(96, "XBowBolt", true)
+        target:Give("weapon_crossbow", false)
+        target:GiveAmmo(96, "XBowBolt", true)
 
-    target:Give("weapon_rpg", true)
-    target:GiveAmmo(10, "RPG_Round", true)
+        target:Give("weapon_rpg", true)
+        target:GiveAmmo(10, "RPG_Round", true)
 
-    target:Give("weapon_slam", true)
-    target:GiveAmmo(10, "slam", true)
+        target:Give("weapon_slam", true)
+        target:GiveAmmo(10, "slam", true)
 
-    target:Give("weapon_frag", true)
-    target:GiveAmmo(10, "Grenade", true)
+        target:Give("weapon_frag", true)
+        target:GiveAmmo(10, "Grenade", true)
+    end
 end)
 
 
@@ -92,7 +94,7 @@ concommand.Add("gm_delweapons", function(ply, cmd, args)
     end
 
     if not args[1] then
-        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <#userid|name>", cmd))
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <userid|name>", cmd))
         return
     end
 
@@ -126,7 +128,7 @@ concommand.Add("gm_sethealth", function(ply, cmd, args)
     end
 
     if not args[1] then
-        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <#userid|name> [amount]", cmd))
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <userid|name> [amount]", cmd))
         return
     end
 
@@ -165,7 +167,7 @@ concommand.Add("gm_setarmor", function(ply, cmd, args)
     end
 
     if not args[1] then
-        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <#userid|name> [amount]", cmd))
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <userid|name> [amount]", cmd))
         return
     end
 
