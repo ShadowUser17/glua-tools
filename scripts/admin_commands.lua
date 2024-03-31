@@ -14,6 +14,16 @@ concommand.Add("gm_list_npcs", function(ply, cmd, args)
 end)
 
 
+concommand.Add("gm_remove_npcs", function(ply, cmd, args)
+    for index, ent in ents.Iterator() do
+        if ent:IsNPC() then
+            ent:Remove()
+            ply:PrintMessage(HUD_PRINTCONSOLE, string.format("%d %s %d", index, ent:GetClass(), ent:Health()))
+        end
+    end
+end)
+
+
 concommand.Add("gm_ignite_player", function(ply, cmd, args)
     if not ply:IsAdmin() then
         ply:PrintMessage(HUD_PRINTCONSOLE, "You must be an admin to use this command!")
@@ -142,6 +152,75 @@ concommand.Add("gm_set_weapons", function(ply, cmd, args)
         target:Give("weapon_frag", true)
         target:GiveAmmo(10, "Grenade", true)
     end
+end)
+
+
+concommand.Add("gm_hls_weapons", function(ply, cmd, args)
+    if not ply:IsAdmin() then
+        ply:PrintMessage(HUD_PRINTCONSOLE, "You must be an admin to use this command!")
+        return
+    end
+
+    if not args[1] then
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <userid|name>", cmd))
+        return
+    end
+
+    local target = nil
+    if tonumber(args[1]) then
+        target = Entity(tonumber(args[1]))
+
+    else
+        for _, item in ipairs(player.GetAll()) do
+            if string.find(string.lower(item:Nick()), string.lower(args[1])) ~= nil then
+                target = item
+                break
+            end
+        end
+    end
+
+    if not IsValid(target) or not target:IsPlayer() then
+        ply:PrintMessage(HUD_PRINTCONSOLE, "Player not found!")
+        return
+    end
+
+    target:StripWeapons()
+    target:StripAmmo()
+
+    target:Give("weapon_crowbar_hl1", true)
+    target:Give("weapon_hornetgun", false)
+
+    target:Give("weapon_357_hl1", false)
+    target:GiveAmmo(200, "357Round", true)
+
+    target:Give("weapon_mp5_hl1", false)
+    target:GiveAmmo(500, "9mmRound", true)
+    target:GiveAmmo(10, "MP5_Grenade", true)
+
+    target:Give("weapon_shotgun_hl1", false)
+    target:GiveAmmo(296, "BuckshotHL1", true)
+
+    target:Give("weapon_crossbow_hl1", false)
+    target:GiveAmmo(100, "XBowBoltHL1", true)
+
+    target:Give("weapon_rpg_hl1", false)
+    target:GiveAmmo(11, "RPG_Rocket", true)
+
+    target:Give("weapon_handgrenade", true)
+    target:GiveAmmo(20, "GrenadeHL1", true)
+
+    target:Give("weapon_tripmine", true)
+    target:GiveAmmo(20, "TripMine", true)
+
+    target:Give("weapon_satchel", true)
+    target:GiveAmmo(20, "Satchel", true)
+
+    target:Give("weapon_snark", true)
+    target:GiveAmmo(20, "Snark", true)
+
+    target:Give("weapon_gauss", true)
+    target:Give("weapon_egon", true)
+    target:GiveAmmo(700, "Uranium", true)
 end)
 
 
