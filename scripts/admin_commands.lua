@@ -1,14 +1,14 @@
 concommand.Add("gm_list_players", function(ply, cmd, args)
-    for _, ent in ipairs(player.GetAll()) do
-        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("%s (%d %d)", ent:Nick(), ent:Health(), ent:Armor()))
+    for index, ent in ipairs(player.GetAll()) do
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("%d %s (%d %d)", index, ent:Nick(), ent:Health(), ent:Armor()))
     end
 end)
 
 
 concommand.Add("gm_list_npcs", function(ply, cmd, args)
-    for _, ent in ents.Iterator() do
+    for index, ent in ents.Iterator() do
         if ent:IsNPC() then
-            ply:PrintMessage(HUD_PRINTCONSOLE, string.format("%s %d", ent:GetClass(), ent:Health()))
+            ply:PrintMessage(HUD_PRINTCONSOLE, string.format("%d %s %d", index, ent:GetClass(), ent:Health()))
         end
     end
 end)
@@ -40,6 +40,28 @@ concommand.Add("gm_ignite_player", function(ply, cmd, args)
 
     if not IsValid(target) or not target:IsPlayer() then
         ply:PrintMessage(HUD_PRINTCONSOLE, "Player not found!")
+        return
+    end
+
+    if not args[2] then
+        target:Ignite(30, 0)
+    else
+        target:Ignite(tonumber(args[2]), 0)
+    end
+end)
+
+
+concommand.Add("gm_ignite_npc", function(ply, cmd, args)
+    if not args[1] then
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <id> [time]", cmd))
+        return
+    end
+
+    local items = ents.GetAll()
+    local target = items[tonumber(args[1])]
+
+    if not IsValid(target) or not target:IsNPC() then
+        ply:PrintMessage(HUD_PRINTCONSOLE, "NPC not found!")
         return
     end
 
@@ -87,7 +109,6 @@ concommand.Add("gm_set_weapons", function(ply, cmd, args)
     target:Give("weapon_physcannon", true)
     target:Give("weapon_stunstick", true)
     target:Give("weapon_physgun", true)
-    target:Give("weapon_medkit", false)
     target:Give("gmod_tool", true)
 
     -- Extra weapons:
@@ -124,7 +145,7 @@ concommand.Add("gm_set_weapons", function(ply, cmd, args)
 end)
 
 
-concommand.Add("gm_del_weapons", function(ply, cmd, args)
+concommand.Add("gm_remove_weapons", function(ply, cmd, args)
     if not ply:IsAdmin() then
         ply:PrintMessage(HUD_PRINTCONSOLE, "You must be an admin to use this command!")
         return
