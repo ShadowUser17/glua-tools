@@ -50,6 +50,7 @@ concommand.Add("gm_getweapons", function(ply, cmd, args)
     target:Give("weapon_physcannon", true)
     target:Give("weapon_stunstick", true)
     target:Give("weapon_physgun", true)
+    target:Give("weapon_medkit", false)
     target:Give("gmod_tool", true)
 
     -- Base weapons:
