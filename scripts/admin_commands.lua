@@ -1,11 +1,11 @@
-concommand.Add("gm_getplayers", function(ply, cmd, args)
+concommand.Add("gm_list_players", function(ply, cmd, args)
     for _, ent in ipairs(player.GetAll()) do
         ply:PrintMessage(HUD_PRINTCONSOLE, string.format("%s (%d %d)", ent:Nick(), ent:Health(), ent:Armor()))
     end
 end)
 
 
-concommand.Add("gm_getnpcs", function(ply, cmd, args)
+concommand.Add("gm_list_npcs", function(ply, cmd, args)
     for _, ent in ents.Iterator() do
         if ent:IsNPC() then
             ply:PrintMessage(HUD_PRINTCONSOLE, string.format("%s %d", ent:GetClass(), ent:Health()))
@@ -14,7 +14,44 @@ concommand.Add("gm_getnpcs", function(ply, cmd, args)
 end)
 
 
-concommand.Add("gm_getweapons", function(ply, cmd, args)
+concommand.Add("gm_ignite_player", function(ply, cmd, args)
+    if not ply:IsAdmin() then
+        ply:PrintMessage(HUD_PRINTCONSOLE, "You must be an admin to use this command!")
+        return
+    end
+
+    if not args[1] then
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <userid|name> [time]", cmd))
+        return
+    end
+
+    local target = nil
+    if tonumber(args[1]) then
+        target = Entity(tonumber(args[1]))
+
+    else
+        for _, item in ipairs(player.GetAll()) do
+            if string.find(string.lower(item:Nick()), string.lower(args[1])) ~= nil then
+                target = item
+                break
+            end
+        end
+    end
+
+    if not IsValid(target) or not target:IsPlayer() then
+        ply:PrintMessage(HUD_PRINTCONSOLE, "Player not found!")
+        return
+    end
+
+    if not args[2] then
+        target:Ignite(30, 0)
+    else
+        target:Ignite(tonumber(args[2]), 0)
+    end
+end)
+
+
+concommand.Add("gm_set_weapons", function(ply, cmd, args)
     if not ply:IsAdmin() then
         ply:PrintMessage(HUD_PRINTCONSOLE, "You must be an admin to use this command!")
         return
@@ -87,7 +124,7 @@ concommand.Add("gm_getweapons", function(ply, cmd, args)
 end)
 
 
-concommand.Add("gm_delweapons", function(ply, cmd, args)
+concommand.Add("gm_del_weapons", function(ply, cmd, args)
     if not ply:IsAdmin() then
         ply:PrintMessage(HUD_PRINTCONSOLE, "You must be an admin to use this command!")
         return
@@ -121,7 +158,7 @@ concommand.Add("gm_delweapons", function(ply, cmd, args)
 end)
 
 
-concommand.Add("gm_sethealth", function(ply, cmd, args)
+concommand.Add("gm_set_health", function(ply, cmd, args)
     if not ply:IsAdmin() then
         ply:PrintMessage(HUD_PRINTCONSOLE, "You must be an admin to use this command!")
         return
@@ -160,7 +197,7 @@ concommand.Add("gm_sethealth", function(ply, cmd, args)
 end)
 
 
-concommand.Add("gm_setarmor", function(ply, cmd, args)
+concommand.Add("gm_set_armor", function(ply, cmd, args)
     if not ply:IsAdmin() then
         ply:PrintMessage(HUD_PRINTCONSOLE, "You must be an admin to use this command!")
         return
