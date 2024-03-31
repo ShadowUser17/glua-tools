@@ -125,8 +125,8 @@ concommand.Add("gm_sethealth", function(ply, cmd, args)
         return
     end
 
-    if not args[1] or not args[2] then
-        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <#userid|name> <amount>", cmd))
+    if not args[1] then
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <#userid|name> [amount]", cmd))
         return
     end
 
@@ -148,7 +148,12 @@ concommand.Add("gm_sethealth", function(ply, cmd, args)
         return
     end
 
-    target:SetHealth(tonumber(args[2]))
+    if not args[2] then
+        target:SetHealth(target:GetMaxHealth())
+    else
+        target:SetHealth(tonumber(args[2]))
+    end
+
     ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Health of %s is %d", target:Nick(), ply:Health()))
 end)
 
@@ -159,8 +164,8 @@ concommand.Add("gm_setarmor", function(ply, cmd, args)
         return
     end
 
-    if not args[1] or not args[2] then
-        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <#userid|name> <amount>", cmd))
+    if not args[1] then
+        ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Usage: %s <#userid|name> [amount]", cmd))
         return
     end
 
@@ -182,6 +187,11 @@ concommand.Add("gm_setarmor", function(ply, cmd, args)
         return
     end
 
-    target:SetArmor(tonumber(args[2]))
+    if not args[2] then
+        target:SetArmor(target:GetMaxArmor())
+    else
+        target:SetArmor(tonumber(args[2]))
+    end
+
     ply:PrintMessage(HUD_PRINTCONSOLE, string.format("Armor of %s is %d", target:Nick(), ply:Armor()))
 end)
