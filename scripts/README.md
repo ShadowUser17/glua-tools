@@ -1,12 +1,12 @@
 #### How to install:
-- With manual load:
-```bash
-cp ./script.lua ~/.steam/steam/steamapps/common/GarrysMod/garrysmod/lua/
+- Copy your script to the next directory for manual load:
 ```
-```bash
+~/.steam/steam/steamapps/common/GarrysMod/garrysmod/lua/
+```
+```
 lua_openscript script.lua
 ```
-- With automatic load:
-```bash
-cp ./script.lua ~/.steam/steam/steamapps/common/GarrysMod/garrysmod/lua/autorun/
+- Copy your script to the next directory for automatic load:
+```
+~/.steam/steam/steamapps/common/GarrysMod/garrysmod/lua/autorun/
 ```
